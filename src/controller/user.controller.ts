@@ -43,13 +43,9 @@ export const create = async(req:Request, res:Response, next: NextFunction) => {
 
 export const update = async(req: Request, res: Response, next: NextFunction) => {
   try{
-    const usernameParam = req.params.username;
-
-    if (typeof usernameParam !== "string") {
-      return res.status(400).json({ message: "Invalid username parameter" });
-    }
-    const username: string =  req.params.username;
+     // const username: string =  req.params.username;
     
+    const usernameParam = req.params.username;
 
     if (typeof usernameParam !== "string") {
       return res.status(400).json({ message: "Invalid username parameter" });
