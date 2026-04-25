@@ -19,7 +19,7 @@ describe('User API Tests', () =>{
     beforeAll(async() => {
         await server.start();
         const hash = await bcrypt.hash("12345", 10);
-        const user = User.create ({
+        const user = await User.create ({
             username: "testUser",
             password: hash,
             email: "testUser@aueb.gr",
@@ -34,14 +34,14 @@ describe('User API Tests', () =>{
               }]};
         // console.log("PAYLOAD>>", payload);
         // console.log("JWT_SECRET", JWT_SECRET);
-        const token = jwt.sign(payload, JWT_SECRET, {expiresIn:'1h'});
+        token = jwt.sign(payload, JWT_SECRET, {expiresIn:'1h'});
         // console.log("TOKEN>>>>>>", token);
     });
 
     afterAll(async() => {await server.stop()});
 
     test("GET /users -> returns all users", async() => {
-        const res = await server.request.get('users');
+        const res = await server.request.get('/users');
         console.log(res);
         expect(res.status).toBe(200);
         expect(Array.isArray(res.body)).toBe(true)
@@ -49,7 +49,7 @@ describe('User API Tests', () =>{
 
     test('Post /users -> create a user', async() =>{
         const res = await server.request.post('/users')
-        .set('Authorization', 'Bearer ${token}')
+        .set('Authorization', `Bearer ${token}`)
         .send({username:"user1", password:"123456"});
         console.log("POST>>>>>>", res.status, res.body);
         expect(res.status).toBe(201);
@@ -59,7 +59,7 @@ describe('User API Tests', () =>{
      test('POST /users -> create a user with wrong password', async() => {
     const res = await server.request.post('/users')
       .set('Authorization', 'Bearer ${token}')
-      .send(({username:'user2', password:"1234"}));
+      .send({username:'user2', password:"1234"});
 
       expect(res.status).toBe(400);
     });
@@ -67,7 +67,7 @@ describe('User API Tests', () =>{
     test('POST /users -> create a user with wrong username', async() => {
     const res = await server.request.post('/users')
       .set('Authorization', 'Bearer ${token}')
-      .send(({username:'us', password:"123456"}));
+      .send({username:'us', password:"123456"});
 
       expect(res.status).toBe(400);
     });
