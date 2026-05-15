@@ -5,7 +5,7 @@ interface IPhone {type:string, number:string}
 export interface IUser extends Document {
     username: string;
     password: string;
-    firsname?: string;
+    firstname?: string;
     lastname?: string;
     email?: string;
     address?:{
@@ -25,12 +25,12 @@ const PhoneSchema = new Schema<IPhone>({
 })
 
 const UserSchema = new Schema({
-    username:  {type:String, required:true, unique:true },
-    password:  {type:String, required:true, unique:true },
+    username:  {type:String, required:true, unique:false },
+    password:  {type:String, required:true, unique:false },
     firstname: String,
     lastname: String,
     email: {type:String, unique:true},
-    adress: {
+    address: {
         area: String,
         street: String,
         number: String,
